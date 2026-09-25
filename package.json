@@ -1,0 +1,13 @@
+{
+  "name": "pgdm-root",
+  "private": true,
+  "bin": {
+    "power-apps": "./scripts/power-apps.js"
+  },
+  "scripts": {
+    "dev": "cd project-tracker && npm run dev",
+    "build": "cd project-tracker && npm run build",
+    "push": "cd project-tracker && npm run build && \"C:\\Users\\Dell\\AppData\\Local\\Microsoft\\PowerAppsCLI\\pac.cmd\" code push",
+    "postinstall": "cd project-tracker && npm install"
+  }
+}

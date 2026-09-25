@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "appId": "ac7306bb-a7e9-40d7-9b4f-94e958374fab",
+  "appDisplayName": "PGDM - Project Governance",
+  "region": "prod",
+  "environmentId": "d48e4780-e13a-e66b-9fb3-413f10b9f256",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {},
+  "databaseReferences": {}
+}
