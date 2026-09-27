@@ -7,28 +7,35 @@ interface UserTableProps {
 }
 
 export default function UserTable({ users }: UserTableProps) {
-  const { users: allUsers, updateUser } = useTeam()
-  const nameOf = (id?: string) => allUsers.find((u) => u.id === id)?.name ?? '—'
+  const { updateUser } = useTeam()
+
+  if (users.length === 0) {
+    return <div className="empty-state text-sm">No users found</div>
+  }
 
   return (
     <div className="table-container">
       <table className="data-table">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>User</th>
             <th>Email</th>
             <th>Role</th>
-            <th>Reports To</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {users.map((u) => (
             <tr key={u.id}>
-              <td>{u.name}</td>
+              <td style={{ fontWeight: 600 }}>{u.name}</td>
               <td className="text-muted">{u.email}</td>
               <td><StatusBadge value={u.role} type="role" /></td>
-              <td className="text-muted">{nameOf(u.reportsToId)}</td>
+              <td>
+                <span className={`tag ${u.isActive === false ? 'text-muted' : ''}`} style={{ background: u.isActive === false ? '#F2F3F3' : '#D9EAE7', color: u.isActive === false ? '#6F6F6F' : '#007560' }}>
+                  {u.isActive === false ? 'Inactive' : 'Active'}
+                </span>
+              </td>
               <td>
                 <button
                   className="btn btn-sm btn-secondary"

@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom'
 import { COLORS, ROLE_COLORS } from '../../constants/theme'
 import { useApp } from '../../context/AppContext'
 import { useTeam } from '../../context/TeamContext'
-import ViewAsPicker from '../shared/ViewAsPicker'
 
 const PAGE_TITLES: Record<string, string> = {
   '/': 'Executive Dashboard',
@@ -18,7 +17,7 @@ const PAGE_TITLES: Record<string, string> = {
 
 export default function TopBar() {
   const { blockers } = useApp()
-  const { currentUser, identitySource } = useTeam()
+  const { currentUser } = useTeam()
   const location = useLocation()
   const [showProfile, setShowProfile] = useState(false)
 
@@ -35,8 +34,6 @@ export default function TopBar() {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        {identitySource === 'fallback-mock' && <ViewAsPicker />}
-
         {/* Search */}
         <div style={{ position: 'relative' }}>
           <Search size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#BDBDBD' }} />
