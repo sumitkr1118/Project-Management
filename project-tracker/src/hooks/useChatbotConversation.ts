@@ -27,10 +27,14 @@ export function useChatbotConversation() {
   const [pending, setPending] = useState<PendingState | null>(null)
   const [awaitingConfirm, setAwaitingConfirm] = useState(false)
 
-  const { projects, domains, blockers, addProject, updateProject } = useApp()
+  const { projects, domains, blockers, addProject, updateProject, addDomain, addBlocker, updateBlocker } = useApp()
   const { users, tasks, dailyUpdates, currentUser, addUser, submitDailyUpdate, getDailyUpdate } = useTeam()
 
-  const ctx: ActionContext = { currentUser, users, projects, domains, tasks, addUser, addProject, updateProject, submitDailyUpdate, getDailyUpdate }
+  const ctx: ActionContext = {
+    currentUser, users, projects, domains, tasks, blockers,
+    addUser, addProject, updateProject, addDomain, addBlocker, updateBlocker,
+    submitDailyUpdate, getDailyUpdate,
+  }
 
   const pushBot = (text: string) => setMessages((prev) => [...prev, { id: generateId(), role: 'bot', text }])
   const pushUser = (text: string) => setMessages((prev) => [...prev, { id: generateId(), role: 'user', text }])

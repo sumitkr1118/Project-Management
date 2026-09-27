@@ -1,5 +1,5 @@
-import type { User, Project, Domain, Task, TaskUpdateEntry } from '../types'
-import { isTeamLead, canEditProject } from './permissions'
+import type { User, Project, Domain, Task, Blocker, TaskUpdateEntry } from '../types'
+import { isTeamLead, canEditProject, getVisibleProjects } from './permissions'
 
 export interface FieldContext {
   currentUser: User
@@ -7,6 +7,7 @@ export interface FieldContext {
   projects: Project[]
   domains: Domain[]
   tasks: Task[]
+  blockers: Blocker[]
   getDailyUpdate: (developerId: string, date: string) => { entries: TaskUpdateEntry[]; overallNote?: string } | undefined
 }
 
@@ -105,6 +106,28 @@ export function myTaskField(key: string, prompt: string): FieldSpec {
       const mine = ctx.tasks.filter((t) => t.assignedToId === ctx.currentUser.id)
       const task = fuzzyFind(raw, mine, (t) => t.title)
       return task ? { ok: true, value: task.id } : { ok: false, error: `Couldn't find a task of yours matching "${raw}". Your tasks: ${mine.map((t) => t.title).join(', ') || 'none'}.` }
+    },
+  }
+}
+
+export function visibleProjectField(key: string, prompt: string): FieldSpec {
+  return {
+    key, prompt,
+    resolve: (raw, ctx) => {
+      const candidates = getVisibleProjects(ctx.currentUser, ctx.projects, ctx.tasks)
+      const project = fuzzyFind(raw, candidates, (p) => p.name)
+      return project ? { ok: true, value: project.id } : { ok: false, error: `Couldn't find a project of yours matching "${raw}". Yours: ${candidates.map((p) => p.name).join(', ') || 'none'}.` }
+    },
+  }
+}
+
+export function openBlockerField(key: string, prompt: string): FieldSpec {
+  return {
+    key, prompt,
+    resolve: (raw, ctx) => {
+      const open = ctx.blockers.filter((b) => b.status !== 'Resolved' && b.status !== 'Closed')
+      const blocker = fuzzyFind(raw, open, (b) => `${b.projectName} ${b.description}`)
+      return blocker ? { ok: true, value: blocker.id } : { ok: false, error: `Couldn't find an open blocker matching "${raw}". Open blockers: ${open.map((b) => `${b.projectName}: ${b.description.slice(0, 40)}`).join(' | ') || 'none'}.` }
     },
   }
 }
